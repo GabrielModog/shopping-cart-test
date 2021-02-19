@@ -34,6 +34,7 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/jsx-props-no-spreading": "off",
     "consistent-return": "off",
+    "@typescript-eslint/naming-convention": "off",
     "prettier/prettier": [
       "error",
       {

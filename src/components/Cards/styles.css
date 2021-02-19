@@ -1,0 +1,42 @@
+.cards {
+  width: 60%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem;
+}
+
+.card-item {
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+  height: 240px;
+  border: 1px solid #161616;
+  margin: 0.5rem;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.card-item__checkout button {
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 18px;
+  color: #f2f2f2;
+  background-color: #161616;
+  height: 50px;
+  width: 100%;
+}
+
+.card-item__content {
+  text-align: center;
+}
+
+.card-item__content h4 {
+  text-decoration: underline;
+  margin: 5px 0;
+}
+
+.card-item-placeholder {
+  background-color: #f2f2f2;
+  height: 94px;
+}
