@@ -4,10 +4,16 @@ import './styles.css';
 
 import NavBar from '../NavBar';
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="container">
-      <NavBar />
+      <header>
+        <NavBar />
+      </header>
       <main>{children}</main>
     </div>
   );
