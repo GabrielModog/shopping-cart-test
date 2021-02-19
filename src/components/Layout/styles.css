@@ -9,6 +9,7 @@
   width: 960px;
   max-width: 960px;
   margin: 5rem 0;
+  display: flex;
 }
 
 h3 {

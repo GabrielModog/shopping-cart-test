@@ -18,7 +18,7 @@ const Cards: React.FC<ICards> = ({ data }: ICards) => {
             <h4>$ {item.price}</h4>
             <h5>LEFT: {item.available}</h5>
           </div>
-          <div className="card-item__checkout">
+          <div className="card-item__add">
             <button type="button">ADD TO CART</button>
           </div>
         </div>

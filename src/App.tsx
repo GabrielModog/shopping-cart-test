@@ -1,5 +1,6 @@
 import React from 'react';
 import Cards from './components/Cards';
+import Cart from './components/Cart';
 
 import Layout from './components/Layout';
 import { Product } from './services/utils';
@@ -33,8 +34,8 @@ const data: Array<Product> = [
 
 const App: React.FC<any> = () => (
   <Layout>
-    <h1>Shopping Cart</h1>
     <Cards data={data} />
+    <Cart />
   </Layout>
 );
 

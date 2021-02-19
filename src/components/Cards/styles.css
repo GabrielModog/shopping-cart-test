@@ -16,11 +16,11 @@
   overflow: hidden;
 }
 
-.card-item__checkout button {
+.card-item__add button {
   border: none;
   font-weight: bold;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   color: #f2f2f2;
   background-color: #161616;
   height: 50px;
