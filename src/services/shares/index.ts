@@ -9,6 +9,15 @@ export interface ICart {
   vouchers: Voucher[];
 }
 
+export const defaultCartState = {
+  total: 0,
+  subtotal: 0,
+  shippingCosts: 0,
+  withDescounts: 0,
+  cart: [],
+  vouchers: [],
+};
+
 type ACTIONS_TYPES_CART =
   | { type: 'load_products'; payload: Product[] }
   | { type: 'load_vouchers'; payload: Voucher[] }
