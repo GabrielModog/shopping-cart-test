@@ -5,7 +5,7 @@ export interface Product {
   available: number;
 }
 
-export interface Vourcher {
+export interface Voucher {
   id: number;
   code: string;
   type: string;
