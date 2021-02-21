@@ -1,12 +1,24 @@
 import { Product, Voucher } from '../utils';
 
 export interface ICart {
+  products: Product[];
+  loading: boolean;
+  error: boolean;
+}
+
+export interface IVouchers {
+  list: Voucher[];
+  loading: boolean;
+  error: boolean;
+}
+
+export interface ICartState {
   total: number;
   subtotal: number;
   shippingCosts: number;
   withDescounts: number;
-  cart: Product[];
-  vouchers: Voucher[];
+  cart: ICart;
+  vouchers: IVouchers;
 }
 
 export const defaultCartState = {
@@ -14,13 +26,25 @@ export const defaultCartState = {
   subtotal: 0,
   shippingCosts: 0,
   withDescounts: 0,
-  cart: [],
-  vouchers: [],
+  cart: {
+    loading: true,
+    error: false,
+    products: [],
+  },
+  vouchers: {
+    loading: true,
+    error: false,
+    list: [],
+  },
 };
 
 type ACTIONS_TYPES_CART =
-  | { type: 'load_products'; payload: Product[] }
-  | { type: 'load_vouchers'; payload: Voucher[] }
+  | { type: 'successful_load_products'; payload: Product[] }
+  | { type: 'successful_load_vouchers'; payload: Voucher[] }
+  | { type: 'load_products' }
+  | { type: 'load_vouchers' }
+  | { type: 'failed_load_products' }
+  | { type: 'failed_load_vouchers' }
   | { type: 'add_product'; payload: Product }
   | { type: 'increase_product'; payload: number }
   | { type: 'decrement_product'; payload: number }
@@ -31,17 +55,66 @@ type ACTIONS_TYPES_CART =
   | { type: 'apply_voucher'; payload: Voucher }
   | { type: 'get_shipping'; payload: number };
 
-export function CartReducer(state: ICart, action: ACTIONS_TYPES_CART): ICart {
+export function CartReducer(
+  state: ICartState,
+  action: ACTIONS_TYPES_CART
+): ICartState {
   switch (action.type) {
     case 'load_products':
       return {
         ...state,
-        cart: [...action.payload],
+        cart: {
+          ...state.cart,
+          loading: true,
+          error: false,
+        },
       };
     case 'load_vouchers':
       return {
         ...state,
-        vouchers: [...action.payload],
+        vouchers: {
+          ...state.vouchers,
+          loading: true,
+          error: false,
+        },
+      };
+    case 'successful_load_products':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          loading: false,
+          error: false,
+          products: [...action.payload],
+        },
+      };
+    case 'failed_load_products':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          loading: false,
+          error: true,
+        },
+      };
+    case 'successful_load_vouchers':
+      return {
+        ...state,
+        vouchers: {
+          ...state.vouchers,
+          error: false,
+          loading: false,
+          list: [...action.payload],
+        },
+      };
+    case 'failed_load_vouchers':
+      return {
+        ...state,
+        vouchers: {
+          ...state.vouchers,
+          loading: false,
+          error: true,
+        },
       };
     default:
       return state;

@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import Layout from './components/Layout';
 import { CartContext } from './services';
 
-import Cards from './components/Cards';
+import ProductCards from './components/ProductCards';
 import Cart from './components/Cart';
 
 const App: React.FC<any> = () => {
@@ -11,7 +11,7 @@ const App: React.FC<any> = () => {
 
   return (
     <Layout>
-      <Cards data={cart} />
+      <ProductCards cart={cart} />
       <Cart />
     </Layout>
   );
