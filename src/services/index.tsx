@@ -6,6 +6,7 @@ import {
   IVouchers,
   OnCart,
 } from './shares';
+import { Product } from './utils';
 
 export interface Services {
   cart: ICart;
@@ -37,6 +38,12 @@ export const CartContext = React.createContext<Services>(defaultServicesState);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(CartReducer, defaultCartState);
+
+  const addProductToCart = (product: Product) =>
+    dispatch({
+      type: 'add_to_cart',
+      payload: product,
+    });
 
   useEffect(() => {
     // fetch products

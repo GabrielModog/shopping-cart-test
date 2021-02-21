@@ -124,6 +124,29 @@ export function CartReducer(
           error: true,
         },
       };
+    case 'add_to_cart': {
+      const avaliableChanged = state.cart.products.map((product: Product) => {
+        if (product.id === action.payload.id)
+          return {
+            ...product,
+            available: product.available - 1,
+          };
+
+        return product;
+      });
+
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          products: avaliableChanged,
+        },
+        onCart: {
+          ...state.onCart,
+          products: [...state.onCart.products, action.payload],
+        },
+      };
+    }
     default:
       return state;
   }
