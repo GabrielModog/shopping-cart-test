@@ -2,7 +2,7 @@ import React from 'react';
 
 import './styles.css';
 
-const NavBar: React.FC<any> = props => {
+const NavBar: React.FC<any> = () => {
   return (
     <nav>
       <div>
