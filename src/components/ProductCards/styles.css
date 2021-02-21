@@ -25,6 +25,12 @@
   background-color: #161616;
   height: 50px;
   width: 100%;
+  transition: 450ms;
+}
+
+.card-item__add button:hover,
+.card-item__add button:focus {
+  opacity: 0.9;
 }
 
 .card-item__content {

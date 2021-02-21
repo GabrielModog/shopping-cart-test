@@ -1,9 +1,16 @@
 import React, { ReactNode, useEffect, useReducer } from 'react';
-import { CartReducer, defaultCartState, ICart, IVouchers } from './shares';
+import {
+  CartReducer,
+  defaultCartState,
+  ICart,
+  IVouchers,
+  OnCart,
+} from './shares';
 
 export interface Services {
   cart: ICart;
   vouchers: IVouchers;
+  onCart: OnCart;
 }
 
 const defaultServicesState: Services = {
@@ -16,6 +23,13 @@ const defaultServicesState: Services = {
     loading: false,
     error: true,
     list: [],
+  },
+  onCart: {
+    products: [],
+    total: 0,
+    subtotal: 0,
+    shippingCosts: 0,
+    withDescounts: 0,
   },
 };
 
@@ -70,6 +84,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const services = {
     cart: state.cart,
     vouchers: state.vouchers,
+    onCart: state.onCart,
   };
 
   return (

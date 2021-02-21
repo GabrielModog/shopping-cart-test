@@ -1,27 +1,17 @@
 import React from 'react';
+import { OnCart } from '../../services/shares';
 import { Product } from '../../services/utils';
 
 import './styles.css';
 
-const data: Array<Product> = [
-  {
-    id: 1,
-    name: 'product1',
-    price: 123.5,
-    available: 4,
-  },
-  {
-    id: 2,
-    name: 'product2',
-    price: 123.5,
-    available: 4,
-  },
-];
+interface OnCartInfo {
+  data: OnCart;
+}
 
-const Cart: React.FC<any> = () => {
+const Cart: React.FC<OnCartInfo> = ({ data }: OnCartInfo) => {
   return (
     <div className="shopping-cart">
-      {data.map((product: Product) => (
+      {data.products.map((product: Product) => (
         <div key={product.id} className="shopping-cart-item">
           <div className="shopping-cart-item-placeholder" />
           <div className="shopping-cart-item__content">
@@ -45,7 +35,7 @@ const Cart: React.FC<any> = () => {
       <div className="shopping-cart-info">
         <div className="shopping-cart-info__content">
           <h5>Subtotal</h5>
-          <h5>$ 123,23</h5>
+          <h5>{data.subtotal}</h5>
         </div>
         <div className="shopping-cart-info__content">
           <h5>Shipping</h5>

@@ -7,12 +7,12 @@ import ProductCards from './components/ProductCards';
 import Cart from './components/Cart';
 
 const App: React.FC<any> = () => {
-  const { cart } = useContext(CartContext);
+  const { cart, onCart } = useContext(CartContext);
 
   return (
     <Layout>
       <ProductCards cart={cart} />
-      <Cart />
+      <Cart data={onCart} />
     </Layout>
   );
 };

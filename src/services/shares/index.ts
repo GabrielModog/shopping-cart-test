@@ -12,20 +12,28 @@ export interface IVouchers {
   error: boolean;
 }
 
-export interface ICartState {
+export interface OnCart {
   total: number;
   subtotal: number;
   shippingCosts: number;
   withDescounts: number;
+  products: Product[];
+}
+
+export interface ICartState {
   cart: ICart;
   vouchers: IVouchers;
+  onCart: OnCart;
 }
 
 export const defaultCartState = {
-  total: 0,
-  subtotal: 0,
-  shippingCosts: 0,
-  withDescounts: 0,
+  onCart: {
+    products: [],
+    total: 0,
+    subtotal: 0,
+    shippingCosts: 0,
+    withDescounts: 0,
+  },
   cart: {
     loading: true,
     error: false,
@@ -45,7 +53,7 @@ type ACTIONS_TYPES_CART =
   | { type: 'load_vouchers' }
   | { type: 'failed_load_products' }
   | { type: 'failed_load_vouchers' }
-  | { type: 'add_product'; payload: Product }
+  | { type: 'add_to_cart'; payload: Product }
   | { type: 'increase_product'; payload: number }
   | { type: 'decrement_product'; payload: number }
   | { type: 'remove_product'; payload: number }
