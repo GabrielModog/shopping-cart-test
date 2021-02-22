@@ -45,6 +45,11 @@ const Cart: React.FC<any> = () => {
     loadVoucher(voucher);
   };
 
+  const checkoutSubmit = () =>
+    onCart.total > 0
+      ? toast.success('Ready to shipping....')
+      : toast.error('The cart is empty');
+
   return (
     <div className="shopping-cart">
       {onCart.products.map((product: Product) => (
@@ -82,11 +87,17 @@ const Cart: React.FC<any> = () => {
         <input
           type="text"
           placeholder="Descount"
+          id="descountField"
           name="descountField"
           value={textDescount}
           onChange={textDescountOnChanges()}
         />
-        <button name="applyVoucher" type="button" onClick={handlerVoucherCall}>
+        <button
+          id="applyVoucher"
+          name="applyVoucher"
+          type="button"
+          onClick={handlerVoucherCall}
+        >
           Apply
         </button>
       </div>
@@ -113,7 +124,14 @@ const Cart: React.FC<any> = () => {
         </div>
       </div>
       <div className="shopping-cart-checkout">
-        <button type="submit">CHECKOUT</button>
+        <button
+          id="checkout"
+          name="checkout"
+          type="submit"
+          onClick={checkoutSubmit}
+        >
+          CHECKOUT
+        </button>
       </div>
     </div>
   );

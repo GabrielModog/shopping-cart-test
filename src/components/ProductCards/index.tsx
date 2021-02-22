@@ -20,7 +20,12 @@ const ProductCards: React.FC<any> = () => {
               <h5>LEFT: {item.available}</h5>
             </div>
             <div className="card-item__add">
-              <button type="button" onClick={() => addProductToCart(item)}>
+              <button
+                id="addProductToCartBtn"
+                name="addProductToCartBtn"
+                type="button"
+                onClick={() => addProductToCart(item)}
+              >
                 ADD TO CART
               </button>
             </div>
