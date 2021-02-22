@@ -112,7 +112,7 @@ const Cart: React.FC<any> = () => {
         </div>
         <div className="shopping-cart-info__content">
           <h5>Descount</h5>
-          <h5>$ {onCart.withDescounts}</h5>
+          <h5>$ {onCart.descount}</h5>
         </div>
         <div className="shopping-cart-info__content">
           <h5>

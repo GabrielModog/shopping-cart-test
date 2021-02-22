@@ -23,7 +23,9 @@ export interface OnCart {
   subtotal: number;
   quantity: number;
   shippingCosts: number;
-  withDescounts: number;
+  descount: number | string;
+  hasDescount: boolean;
+  currentVoucher: Voucher;
   products: Product[];
 }
 
@@ -36,11 +38,19 @@ export interface ICartState {
 export const defaultCartState = {
   onCart: {
     products: [],
+    currentVoucher: {
+      id: 0,
+      code: '',
+      minValue: 0,
+      amount: 0,
+      type: '',
+    },
     quantity: 0,
     total: 0,
     subtotal: 0,
     shippingCosts: 30,
-    withDescounts: 0,
+    descount: 0,
+    hasDescount: false,
   },
   cart: {
     loading: true,
@@ -69,6 +79,7 @@ type ACTIONS_TYPES_CART =
   | { type: 'get_total' }
   | { type: 'get_subtotal'; payload: number }
   | { type: 'apply_voucher'; payload: Voucher }
+  | { type: 'store_voucher'; payload: Voucher }
   | { type: 'get_shipping'; payload: number };
 
 export function CartReducer(
@@ -171,7 +182,42 @@ export function CartReducer(
         },
       };
     }
-    case 'increase_product':
+    case 'increase_product': {
+      if (state.onCart.hasDescount)
+        return {
+          ...state,
+          onCart: {
+            ...state.onCart,
+            subtotal:
+              state.onCart.currentVoucher.type === 'percent'
+                ? vourchersStrategy.percentual(
+                    state.onCart.subtotal,
+                    state.onCart.currentVoucher.amount
+                  )
+                : getSubtotal(state.onCart.products),
+            total:
+              state.onCart.currentVoucher.type === 'fixed'
+                ? vourchersStrategy.fixed(
+                    state.onCart.subtotal,
+                    state.onCart.currentVoucher.amount
+                  )
+                : state.onCart.subtotal + state.onCart.shippingCosts,
+            quantity: state.onCart.quantity + 1,
+            shippingCosts:
+              state.onCart.currentVoucher.type === 'shipping'
+                ? state.onCart.currentVoucher.amount
+                : state.onCart.shippingCosts,
+            products: state.onCart.products.map((product: Product) => {
+              if (product.id === action.payload)
+                return {
+                  ...product,
+                  quantity: product.quantity ? product.quantity + 1 : 1,
+                };
+              return product;
+            }),
+          },
+        };
+
       return {
         ...state,
         cart: {
@@ -205,6 +251,7 @@ export function CartReducer(
           }),
         },
       };
+    }
     case 'decrement_product': {
       const isRemovable = state.onCart.products.some(
         (item: Product) => item.quantity <= 1
@@ -250,6 +297,7 @@ export function CartReducer(
         ...state,
         onCart: {
           ...state.onCart,
+          hasDescount: true,
           total:
             action.payload.type === 'fixed'
               ? vourchersStrategy.fixed(
@@ -274,7 +322,37 @@ export function CartReducer(
               : state.onCart.shippingCosts,
         },
       };
+    case 'store_voucher': {
+      if (action.payload.type === 'fixed')
+        return {
+          ...state,
+          onCart: {
+            ...state.onCart,
+            currentVoucher: action.payload,
+            descount: action.payload.amount,
+          },
+        };
 
+      if (action.payload.type === 'percentual')
+        return {
+          ...state,
+          onCart: {
+            ...state.onCart,
+            currentVoucher: action.payload,
+            descount: action.payload.amount,
+          },
+        };
+      if (action.payload.type === 'shipping')
+        return {
+          ...state,
+          onCart: {
+            ...state.onCart,
+            currentVoucher: action.payload,
+            descount: `Free shipping for purchases above: ${action.payload.minValue}`,
+          },
+        };
+      return state;
+    }
     default:
       return state;
   }

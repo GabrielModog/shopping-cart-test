@@ -36,11 +36,19 @@ const defaultServicesState: Services = {
   },
   onCart: {
     products: [],
+    currentVoucher: {
+      id: 0,
+      code: '',
+      minValue: 0,
+      amount: 0,
+      type: '',
+    },
     quantity: 0,
     total: 0,
     subtotal: 0,
     shippingCosts: 0,
-    withDescounts: 0,
+    descount: 0,
+    hasDescount: false,
   },
 };
 
@@ -67,11 +75,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       payload: id,
     });
 
-  const loadVoucher = (voucher: Voucher) =>
+  const loadVoucher = (voucher: Voucher) => {
     dispatch({
       type: 'apply_voucher',
       payload: voucher,
     });
+
+    dispatch({
+      type: 'store_voucher',
+      payload: voucher,
+    });
+  };
 
   useEffect(() => {
     fetch('https://shielded-wildwood-82973.herokuapp.com/products.json')
