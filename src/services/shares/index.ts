@@ -125,35 +125,25 @@ export function CartReducer(
         },
       };
     case 'add_to_cart': {
-      const avaliableChanged = state.cart.products.map((product: Product) => {
-        if (product.id === action.payload.id)
-          return {
-            ...product,
-            available: product.available > 0 ? product.available - 1 : 0,
-            quantity: product.quantity ? product.quantity + 1 : 1,
-          };
-
-        return product;
-      });
-
-      const removeFromCart = state.onCart.products.filter(
+      const removeFromProducts = state.cart.products.filter(
         (product: Product) => product.id !== action.payload.id
       );
-      const onCartChanged: any = state.cart.products.find(
-        (product: Product) => product.id === action.payload.id
+
+      const productToCart: any = state.cart.products.find(
+        (product: any) => product.id === action.payload.id
       );
 
-      const onCartArray = removeFromCart.concat(onCartChanged);
+      const onCartArray = [...state.onCart.products, productToCart];
 
       return {
         ...state,
         cart: {
           ...state.cart,
-          products: avaliableChanged,
+          products: removeFromProducts,
         },
         onCart: {
           ...state.onCart,
-          products: onCartArray.sort(),
+          products: onCartArray,
         },
       };
     }
