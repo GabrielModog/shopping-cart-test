@@ -1,15 +1,48 @@
 import React, { useContext, useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { CartContext } from '../../services';
-import { Product } from '../../services/utils';
+import { Product, Voucher } from '../../services/utils';
 
 import './styles.css';
 
 const Cart: React.FC<any> = () => {
   const [textDescount, setTextDescount] = useState('');
-  const { onCart, increaseProduct, decrementProduct } = useContext(CartContext);
+  const {
+    vouchers,
+    onCart,
+    increaseProduct,
+    decrementProduct,
+    loadVoucher,
+  } = useContext(CartContext);
 
   const textDescountOnChanges = () => (evt: { target: HTMLInputElement }) => {
     setTextDescount(evt.target.value);
+  };
+
+  const handlerVoucherCall = () => {
+    if (textDescount === '' || onCart.products.length <= 0)
+      return toast.error(
+        'Descount field is empty. Or dont have any products in the Cart.'
+      );
+
+    if (!vouchers.list.some((item: Voucher) => item.code === textDescount)) {
+      toast.error('This voucher is not available anymore...', {
+        position: 'top-right',
+      });
+
+      return setTextDescount('');
+    }
+
+    const voucher: any = vouchers.list.find(
+      (item: Voucher) => item.code === textDescount
+    );
+
+    toast.info('Applying voucher...', {
+      position: 'top-right',
+    });
+
+    loadVoucher(voucher);
   };
 
   return (
@@ -53,7 +86,9 @@ const Cart: React.FC<any> = () => {
           value={textDescount}
           onChange={textDescountOnChanges()}
         />
-        <button type="button">Apply</button>
+        <button name="applyVoucher" type="button" onClick={handlerVoucherCall}>
+          Apply
+        </button>
       </div>
       <div className="shopping-cart-info">
         <div className="shopping-cart-info__content">
@@ -69,8 +104,12 @@ const Cart: React.FC<any> = () => {
           <h5>$ {onCart.withDescounts}</h5>
         </div>
         <div className="shopping-cart-info__content">
-          <h5>Total</h5>
-          <h5>$ {onCart.total}</h5>
+          <h5>
+            <b>Total</b>
+          </h5>
+          <h5>
+            <b>$ {onCart.total}</b>
+          </h5>
         </div>
       </div>
       <div className="shopping-cart-checkout">

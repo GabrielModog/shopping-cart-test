@@ -1,4 +1,5 @@
 import React, { ReactNode, useEffect, useReducer } from 'react';
+import { toast } from 'react-toastify';
 import {
   CartReducer,
   defaultCartState,
@@ -6,7 +7,7 @@ import {
   IVouchers,
   OnCart,
 } from './shares';
-import { Product } from './utils';
+import { Product, Voucher } from './utils';
 
 export interface Services {
   cart: ICart;
@@ -15,12 +16,14 @@ export interface Services {
   addProductToCart: (product: Product) => void;
   increaseProduct: (id: number) => void;
   decrementProduct: (id: number) => void;
+  loadVoucher: (voucher: Voucher) => void;
 }
 
 const defaultServicesState: Services = {
   addProductToCart: () => {},
   increaseProduct: () => {},
   decrementProduct: () => {},
+  loadVoucher: () => {},
   cart: {
     loading: false,
     error: true,
@@ -64,8 +67,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       payload: id,
     });
 
+  const loadVoucher = (voucher: Voucher) =>
+    dispatch({
+      type: 'apply_voucher',
+      payload: voucher,
+    });
+
   useEffect(() => {
-    // fetch products
     fetch('https://shielded-wildwood-82973.herokuapp.com/products.json')
       .then(response => {
         dispatch({
@@ -80,13 +88,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           payload: data.products,
         })
       )
-      .catch(() =>
-        dispatch({
+      .catch(() => {
+        toast.error('Failed to load products');
+        return dispatch({
           type: 'failed_load_products',
-        })
-      );
+        });
+      });
 
-    // fetch vouchers
     fetch('https://shielded-wildwood-82973.herokuapp.com/vouchers.json')
       .then(response => {
         dispatch({
@@ -100,11 +108,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           payload: data.vouchers,
         })
       )
-      .catch(() =>
-        dispatch({
+      .catch(() => {
+        toast.error('Failed to load vouchers');
+        return dispatch({
           type: 'failed_load_vouchers',
-        })
-      );
+        });
+      });
   }, []);
 
   const services = {
@@ -114,6 +123,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     addProductToCart,
     increaseProduct,
     decrementProduct,
+    loadVoucher,
   };
 
   return (
