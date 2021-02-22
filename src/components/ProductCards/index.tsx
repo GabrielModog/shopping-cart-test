@@ -1,18 +1,12 @@
-import React from 'react';
-import { ICart } from '../../services/shares';
-import { Product } from '../../services/utils';
+import React, { useContext } from 'react';
+
+import { CartContext } from '../../services';
 
 import './styles.css';
 
-interface IProductCards {
-  cart: ICart;
-  addProductToCart: (product: Product) => void;
-}
+const ProductCards: React.FC<any> = () => {
+  const { cart, addProductToCart } = useContext(CartContext);
 
-const ProductCards: React.FC<IProductCards> = ({
-  cart,
-  addProductToCart,
-}: IProductCards) => {
   return (
     <div className="cards">
       {cart.loading && <h3>Loading...</h3>}

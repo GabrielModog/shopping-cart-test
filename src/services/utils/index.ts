@@ -13,3 +13,7 @@ export interface Voucher {
   amount: number;
   minValue?: number;
 }
+
+export const getSubtotal = (list: Array<any>) => {
+  return list.reduce((accum, curr) => accum + curr.quantity * curr.price, 0);
+};

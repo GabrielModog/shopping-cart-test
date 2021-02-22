@@ -1,4 +1,4 @@
-import { Product, Voucher } from '../utils';
+import { getSubtotal, Product, Voucher } from '../utils';
 
 export interface ICart {
   products: Product[];
@@ -125,28 +125,57 @@ export function CartReducer(
         },
       };
     case 'add_to_cart': {
-      const removeFromProducts = state.cart.products.filter(
-        (product: Product) => product.id !== action.payload.id
-      );
-
       const productToCart: any = state.cart.products.find(
         (product: any) => product.id === action.payload.id
       );
 
-      const onCartArray = [...state.onCart.products, productToCart];
+      const onCartArray = state.onCart.products.some(
+        (item: Product) => item.id === productToCart.id
+      )
+        ? state.onCart.products
+        : [
+            ...state.onCart.products,
+            {
+              ...productToCart,
+              quantity: productToCart.quantity ? productToCart.quantity + 1 : 1,
+            },
+          ];
 
       return {
         ...state,
-        cart: {
-          ...state.cart,
-          products: removeFromProducts,
-        },
         onCart: {
           ...state.onCart,
           products: onCartArray,
         },
       };
     }
+    case 'increase_product':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          products: state.cart.products.map((product: Product) => {
+            if (product.id === action.payload)
+              return {
+                ...product,
+                available: product.available > 0 ? product.available - 1 : 0,
+              };
+            return product;
+          }),
+        },
+        onCart: {
+          ...state.onCart,
+          subtotal: getSubtotal(state.onCart.products),
+          products: state.onCart.products.map((product: Product) => {
+            if (product.id === action.payload)
+              return {
+                ...product,
+                quantity: product.quantity ? product.quantity + 1 : 1,
+              };
+            return product;
+          }),
+        },
+      };
     default:
       return state;
   }

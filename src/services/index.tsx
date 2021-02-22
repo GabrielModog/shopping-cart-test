@@ -13,10 +13,12 @@ export interface Services {
   vouchers: IVouchers;
   onCart: OnCart;
   addProductToCart: (product: Product) => void;
+  increaseProduct: (id: number) => void;
 }
 
 const defaultServicesState: Services = {
   addProductToCart: () => {},
+  increaseProduct: () => {},
   cart: {
     loading: false,
     error: true,
@@ -45,6 +47,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     dispatch({
       type: 'add_to_cart',
       payload: product,
+    });
+
+  const increaseProduct = (id: number) =>
+    dispatch({
+      type: 'increase_product',
+      payload: id,
     });
 
   useEffect(() => {
@@ -95,6 +103,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     vouchers: state.vouchers,
     onCart: state.onCart,
     addProductToCart,
+    increaseProduct,
   };
 
   return (
