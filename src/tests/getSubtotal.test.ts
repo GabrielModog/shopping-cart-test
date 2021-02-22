@@ -1,4 +1,3 @@
-import React from 'react';
 import { getSubtotal } from '../services/utils';
 
 describe('Get subtotal test suite', () => {

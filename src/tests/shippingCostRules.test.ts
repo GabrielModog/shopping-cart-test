@@ -1,4 +1,4 @@
-import React from 'react';
+import { shippingCostRules } from '../services/utils';
 
 describe('Shipping Cost Rules test suite', () => {
   test('Should return 0 when purchase above $400', () => {

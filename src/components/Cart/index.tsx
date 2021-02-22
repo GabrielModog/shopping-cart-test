@@ -9,6 +9,7 @@ const Cart: React.FC<any> = () => {
 
   return (
     <div className="shopping-cart">
+      <h3>{onCart.quantity}</h3>
       {onCart.products.map((product: Product) => (
         <div key={product.id} className="shopping-cart-item">
           <div className="shopping-cart-item-placeholder" />
@@ -35,19 +36,19 @@ const Cart: React.FC<any> = () => {
       <div className="shopping-cart-info">
         <div className="shopping-cart-info__content">
           <h5>Subtotal</h5>
-          <h5>{onCart.subtotal}</h5>
+          <h5>$ {onCart.subtotal}</h5>
         </div>
         <div className="shopping-cart-info__content">
           <h5>Shipping</h5>
-          <h5>$ 123,23</h5>
+          <h5>$ {onCart.shippingCosts}</h5>
         </div>
         <div className="shopping-cart-info__content">
           <h5>Descount</h5>
-          <h5>$ 123,23</h5>
+          <h5>$ {onCart.withDescounts}</h5>
         </div>
         <div className="shopping-cart-info__content">
           <h5>Total</h5>
-          <h5>$ 123,23</h5>
+          <h5>$ {onCart.total}</h5>
         </div>
       </div>
       <div className="shopping-cart-checkout">

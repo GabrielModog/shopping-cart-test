@@ -1,4 +1,4 @@
-import { getSubtotal, Product, Voucher } from '../utils';
+import { getSubtotal, Product, shippingCostRules, Voucher } from '../utils';
 
 export interface ICart {
   products: Product[];
@@ -15,6 +15,7 @@ export interface IVouchers {
 export interface OnCart {
   total: number;
   subtotal: number;
+  quantity: number;
   shippingCosts: number;
   withDescounts: number;
   products: Product[];
@@ -29,9 +30,10 @@ export interface ICartState {
 export const defaultCartState = {
   onCart: {
     products: [],
+    quantity: 0,
     total: 0,
     subtotal: 0,
-    shippingCosts: 0,
+    shippingCosts: 30,
     withDescounts: 0,
   },
   cart: {
@@ -145,11 +147,16 @@ export function CartReducer(
         ...state,
         onCart: {
           ...state.onCart,
+          quantity: state.onCart.quantity + 1,
           products: onCartArray,
         },
       };
     }
-    case 'increase_product':
+    case 'increase_product': {
+      const productIndividual: any = state.onCart.products.find(
+        (item: Product) => item.id === action.payload
+      );
+
       return {
         ...state,
         cart: {
@@ -166,6 +173,13 @@ export function CartReducer(
         onCart: {
           ...state.onCart,
           subtotal: getSubtotal(state.onCart.products),
+          shippingCosts: shippingCostRules(
+            state.onCart.shippingCosts,
+            state.onCart.subtotal,
+            state.onCart.quantity + 1
+          ),
+          quantity: state.onCart.quantity + 1,
+          total: state.onCart.subtotal + state.onCart.shippingCosts,
           products: state.onCart.products.map((product: Product) => {
             if (product.id === action.payload)
               return {
@@ -176,6 +190,7 @@ export function CartReducer(
           }),
         },
       };
+    }
     default:
       return state;
   }

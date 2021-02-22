@@ -31,6 +31,7 @@ const defaultServicesState: Services = {
   },
   onCart: {
     products: [],
+    quantity: 0,
     total: 0,
     subtotal: 0,
     shippingCosts: 0,
