@@ -1,4 +1,10 @@
-import { getSubtotal, Product, shippingCostRules, Voucher } from '../utils';
+import {
+  getSubtotal,
+  Product,
+  shippingCostRules,
+  Voucher,
+  vourchersStrategy,
+} from '../utils';
 
 export interface ICart {
   products: Product[];
@@ -239,6 +245,36 @@ export function CartReducer(
         },
       };
     }
+    case 'apply_voucher':
+      return {
+        ...state,
+        onCart: {
+          ...state.onCart,
+          total:
+            action.payload.type === 'fixed'
+              ? vourchersStrategy.fixed(
+                  state.onCart.total,
+                  action.payload.amount
+                )
+              : state.onCart.total,
+          subtotal:
+            action.payload.type === 'percentual'
+              ? vourchersStrategy.percentual(
+                  state.onCart.subtotal,
+                  action.payload.amount
+                )
+              : state.onCart.subtotal,
+          shippingCosts:
+            action.payload.type === 'shipping'
+              ? vourchersStrategy.shipping(
+                  state.onCart.subtotal,
+                  action.payload.minValue ?? 0,
+                  state.onCart.shippingCosts
+                )
+              : state.onCart.shippingCosts,
+        },
+      };
+
     default:
       return state;
   }

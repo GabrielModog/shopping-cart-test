@@ -28,3 +28,20 @@ export const shippingCostRules = (
 
   return quantity % 5 ? shipping + 7 : shipping;
 };
+
+interface IVouchersStrategy {
+  percentual: (subtotal: number, amount: number) => number;
+  fixed: (subtotal: number, amount: number) => number;
+  shipping: (
+    subtotal: number,
+    minValue: number,
+    shippingCost: number
+  ) => number;
+}
+
+export const vourchersStrategy: IVouchersStrategy = {
+  percentual: (subtotal: number, amount: number) => (subtotal / amount) * 100,
+  fixed: (subtotal: number, amount: number) => subtotal - amount,
+  shipping: (subtotal: number, minValue: number, shippingCost: number) =>
+    subtotal >= minValue ? 0 : shippingCost,
+};

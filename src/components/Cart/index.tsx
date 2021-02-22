@@ -1,11 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { CartContext } from '../../services';
 import { Product } from '../../services/utils';
 
 import './styles.css';
 
 const Cart: React.FC<any> = () => {
+  const [textDescount, setTextDescount] = useState('');
   const { onCart, increaseProduct, decrementProduct } = useContext(CartContext);
+
+  const textDescountOnChanges = () => (evt: { target: HTMLInputElement }) => {
+    setTextDescount(evt.target.value);
+  };
 
   return (
     <div className="shopping-cart">
@@ -21,17 +26,33 @@ const Cart: React.FC<any> = () => {
             </div>
           </div>
           <div className="shopping-cart-item__actions">
-            <button type="button" onClick={() => increaseProduct(product.id)}>
+            <button
+              id="increaseProduct"
+              name="increaseProduct"
+              type="button"
+              onClick={() => increaseProduct(product.id)}
+            >
               +
             </button>
-            <button type="button" onClick={() => decrementProduct(product.id)}>
+            <button
+              id="decrementProduct"
+              name="decrementProduct"
+              type="button"
+              onClick={() => decrementProduct(product.id)}
+            >
               -
             </button>
           </div>
         </div>
       ))}
       <div className="shopping-cart-vourchers">
-        <input type="text" placeholder="Descount" />
+        <input
+          type="text"
+          placeholder="Descount"
+          name="descountField"
+          value={textDescount}
+          onChange={textDescountOnChanges()}
+        />
         <button type="button">Apply</button>
       </div>
       <div className="shopping-cart-info">
