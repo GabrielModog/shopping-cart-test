@@ -143,8 +143,21 @@ export function CartReducer(
             },
           ];
 
+      const changeAvailable = state.cart.products.map((product: Product) => {
+        if (product.id === action.payload.id)
+          return {
+            ...product,
+            available: product.available - 1,
+          };
+        return product;
+      });
+
       return {
         ...state,
+        cart: {
+          ...state.cart,
+          products: changeAvailable,
+        },
         onCart: {
           ...state.onCart,
           quantity: state.onCart.quantity + 1,
@@ -152,11 +165,7 @@ export function CartReducer(
         },
       };
     }
-    case 'increase_product': {
-      const productIndividual: any = state.onCart.products.find(
-        (item: Product) => item.id === action.payload
-      );
-
+    case 'increase_product':
       return {
         ...state,
         cart: {
@@ -188,6 +197,45 @@ export function CartReducer(
               };
             return product;
           }),
+        },
+      };
+    case 'decrement_product': {
+      const isRemovable = state.onCart.products.some(
+        (item: Product) => item.quantity <= 1
+      );
+
+      const toRemove = state.onCart.products.filter(
+        (item: Product) => item.id !== action.payload
+      );
+
+      const changeQuantity = state.onCart.products.map((product: Product) => {
+        if (product.id === action.payload)
+          return {
+            ...product,
+            quantity: product.quantity > 0 ? product.quantity - 1 : 0,
+          };
+        return product;
+      });
+
+      const changeAvailable = state.cart.products.map((product: Product) => {
+        if (product.id === action.payload)
+          return {
+            ...product,
+            available: product.available + 1,
+          };
+        return product;
+      });
+
+      return {
+        ...state,
+
+        cart: {
+          ...state.cart,
+          products: changeAvailable,
+        },
+        onCart: {
+          ...state.onCart,
+          products: isRemovable ? toRemove : changeQuantity,
         },
       };
     }

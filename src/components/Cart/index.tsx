@@ -5,11 +5,10 @@ import { Product } from '../../services/utils';
 import './styles.css';
 
 const Cart: React.FC<any> = () => {
-  const { onCart, increaseProduct } = useContext(CartContext);
+  const { onCart, increaseProduct, decrementProduct } = useContext(CartContext);
 
   return (
     <div className="shopping-cart">
-      <h3>{onCart.quantity}</h3>
       {onCart.products.map((product: Product) => (
         <div key={product.id} className="shopping-cart-item">
           <div className="shopping-cart-item-placeholder" />
@@ -25,7 +24,9 @@ const Cart: React.FC<any> = () => {
             <button type="button" onClick={() => increaseProduct(product.id)}>
               +
             </button>
-            <button type="button">-</button>
+            <button type="button" onClick={() => decrementProduct(product.id)}>
+              -
+            </button>
           </div>
         </div>
       ))}

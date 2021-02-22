@@ -14,11 +14,13 @@ export interface Services {
   onCart: OnCart;
   addProductToCart: (product: Product) => void;
   increaseProduct: (id: number) => void;
+  decrementProduct: (id: number) => void;
 }
 
 const defaultServicesState: Services = {
   addProductToCart: () => {},
   increaseProduct: () => {},
+  decrementProduct: () => {},
   cart: {
     loading: false,
     error: true,
@@ -53,6 +55,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const increaseProduct = (id: number) =>
     dispatch({
       type: 'increase_product',
+      payload: id,
+    });
+
+  const decrementProduct = (id: number) =>
+    dispatch({
+      type: 'decrement_product',
       payload: id,
     });
 
@@ -105,6 +113,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     onCart: state.onCart,
     addProductToCart,
     increaseProduct,
+    decrementProduct,
   };
 
   return (
