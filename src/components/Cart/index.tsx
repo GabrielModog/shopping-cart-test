@@ -84,22 +84,32 @@ const Cart: React.FC<any> = () => {
         </div>
       ))}
       <div className="shopping-cart-vourchers">
-        <input
-          type="text"
-          placeholder="Descount"
-          id="descountField"
-          name="descountField"
-          value={textDescount}
-          onChange={textDescountOnChanges()}
-        />
-        <button
-          id="applyVoucher"
-          name="applyVoucher"
-          type="button"
-          onClick={handlerVoucherCall}
-        >
-          Apply
-        </button>
+        {vouchers.error ? (
+          <h5 className="shipping-cart-vouchers__empty">
+            don&#39;t have any descounts coupon disponible.
+          </h5>
+        ) : (
+          <>
+            <input
+              type="text"
+              placeholder={
+                vouchers.loading ? 'Loading vouchers...' : 'Descounts...'
+              }
+              id="descountField"
+              name="descountField"
+              value={textDescount}
+              onChange={textDescountOnChanges()}
+            />
+            <button
+              id="applyVoucher"
+              name="applyVoucher"
+              type="button"
+              onClick={handlerVoucherCall}
+            >
+              {vouchers.loading ? 'Loading...' : 'Apply'}
+            </button>
+          </>
+        )}
       </div>
       <div className="shopping-cart-info">
         <div className="shopping-cart-info__content">
