@@ -1,13 +1,18 @@
 import React from 'react';
 import { ICart } from '../../services/shares';
+import { Product } from '../../services/utils';
 
 import './styles.css';
 
 interface IProductCards {
   cart: ICart;
+  addProductToCart: (product: Product) => void;
 }
 
-const ProductCards: React.FC<IProductCards> = ({ cart }: IProductCards) => {
+const ProductCards: React.FC<IProductCards> = ({
+  cart,
+  addProductToCart,
+}: IProductCards) => {
   return (
     <div className="cards">
       {cart.loading && <h3>Loading...</h3>}
@@ -21,7 +26,9 @@ const ProductCards: React.FC<IProductCards> = ({ cart }: IProductCards) => {
               <h5>LEFT: {item.available}</h5>
             </div>
             <div className="card-item__add">
-              <button type="button">ADD TO CART</button>
+              <button type="button" onClick={() => addProductToCart(item)}>
+                ADD TO CART
+              </button>
             </div>
           </div>
         ))

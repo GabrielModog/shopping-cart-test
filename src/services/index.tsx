@@ -12,9 +12,11 @@ export interface Services {
   cart: ICart;
   vouchers: IVouchers;
   onCart: OnCart;
+  addProductToCart: (product: Product) => void;
 }
 
 const defaultServicesState: Services = {
+  addProductToCart: () => {},
   cart: {
     loading: false,
     error: true,
@@ -92,6 +94,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     cart: state.cart,
     vouchers: state.vouchers,
     onCart: state.onCart,
+    addProductToCart,
   };
 
   return (

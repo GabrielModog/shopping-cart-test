@@ -3,6 +3,7 @@ export interface Product {
   name: string;
   price: number;
   available: number;
+  quantity: number;
 }
 
 export interface Voucher {

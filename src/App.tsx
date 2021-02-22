@@ -7,11 +7,11 @@ import ProductCards from './components/ProductCards';
 import Cart from './components/Cart';
 
 const App: React.FC<any> = () => {
-  const { cart, onCart } = useContext(CartContext);
+  const { cart, onCart, addProductToCart } = useContext(CartContext);
 
   return (
     <Layout>
-      <ProductCards cart={cart} />
+      <ProductCards cart={cart} addProductToCart={addProductToCart} />
       <Cart data={onCart} />
     </Layout>
   );

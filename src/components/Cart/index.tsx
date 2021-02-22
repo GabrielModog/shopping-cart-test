@@ -18,7 +18,7 @@ const Cart: React.FC<OnCartInfo> = ({ data }: OnCartInfo) => {
             <h3>{product.name}</h3>
             <div>
               <h5>
-                Quantity: {product.available} - ${product.price}
+                Quantity: {product.quantity} - ${product.price}
               </h5>
             </div>
           </div>

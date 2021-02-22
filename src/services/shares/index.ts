@@ -129,11 +129,21 @@ export function CartReducer(
         if (product.id === action.payload.id)
           return {
             ...product,
-            available: product.available - 1,
+            available: product.available > 0 ? product.available - 1 : 0,
+            quantity: product.quantity ? product.quantity + 1 : 1,
           };
 
         return product;
       });
+
+      const removeFromCart = state.onCart.products.filter(
+        (product: Product) => product.id !== action.payload.id
+      );
+      const onCartChanged: any = state.cart.products.find(
+        (product: Product) => product.id === action.payload.id
+      );
+
+      const onCartArray = removeFromCart.concat(onCartChanged);
 
       return {
         ...state,
@@ -143,7 +153,7 @@ export function CartReducer(
         },
         onCart: {
           ...state.onCart,
-          products: [...state.onCart.products, action.payload],
+          products: onCartArray.sort(),
         },
       };
     }
