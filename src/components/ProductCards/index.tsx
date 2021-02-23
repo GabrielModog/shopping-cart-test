@@ -9,7 +9,7 @@ const ProductCards: React.FC<any> = () => {
 
   return (
     <div className="cards">
-      {cart.loading && <h3>Loading...</h3>}
+      {cart.loading && <h3 id="loadingProducts">Loading...</h3>}
       {!cart.error ? (
         cart.products.map((item: any) => (
           <div key={item.id} className="card-item">
@@ -21,8 +21,8 @@ const ProductCards: React.FC<any> = () => {
             </div>
             <div className="card-item__add">
               <button
-                id="addProductToCartBtn"
-                name="addProductToCartBtn"
+                id={`btn${item.name}`}
+                name={`btn${item.name}`}
                 type="button"
                 onClick={() => addProductToCart(item)}
               >

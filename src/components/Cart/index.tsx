@@ -53,7 +53,11 @@ const Cart: React.FC<any> = () => {
   return (
     <div className="shopping-cart">
       {onCart.products.map((product: Product) => (
-        <div key={product.id} className="shopping-cart-item">
+        <div
+          id={`onCart${product.name}`}
+          key={product.id}
+          className="shopping-cart-item"
+        >
           <div className="shopping-cart-item-placeholder" />
           <div className="shopping-cart-item__content">
             <h3>{product.name}</h3>
@@ -65,16 +69,16 @@ const Cart: React.FC<any> = () => {
           </div>
           <div className="shopping-cart-item__actions">
             <button
-              id="increaseProduct"
-              name="increaseProduct"
+              id={`increment${product.name}`}
+              name={`increment${product.name}`}
               type="button"
               onClick={() => increaseProduct(product.id)}
             >
               +
             </button>
             <button
-              id="decrementProduct"
-              name="decrementProduct"
+              id={`decrement${product.name}`}
+              name={`decrement${product.name}`}
               type="button"
               onClick={() => decrementProduct(product.id)}
             >

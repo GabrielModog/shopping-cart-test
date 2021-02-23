@@ -6,7 +6,7 @@ const NavBar: React.FC<any> = () => {
   return (
     <nav>
       <div>
-        <h3>Shop It</h3>
+        <h3 id="title">Shop It</h3>
       </div>
       <div>
         <h5>John Doe</h5>
