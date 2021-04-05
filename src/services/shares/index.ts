@@ -1,39 +1,18 @@
+// @TODO: split reducers actions responsibilities
+// a single thing doing to much stuff
+
 import {
   getSubtotal,
-  Product,
+  getTotal,
   shippingCostRules,
-  Voucher,
   vourchersStrategy,
+  Product,
+  getProduct,
+  onCartIncreaseQuantity,
+  decreaseAvailableProduct,
 } from '../utils';
 
-export interface ICart {
-  products: Product[];
-  loading: boolean;
-  error: boolean;
-}
-
-export interface IVouchers {
-  list: Voucher[];
-  loading: boolean;
-  error: boolean;
-}
-
-export interface OnCart {
-  total: number;
-  subtotal: number;
-  quantity: number;
-  shippingCosts: number;
-  descount: number | string;
-  hasDescount: boolean;
-  currentVoucher: Voucher;
-  products: Product[];
-}
-
-export interface ICartState {
-  cart: ICart;
-  vouchers: IVouchers;
-  onCart: OnCart;
-}
+import { ICartState, ACTIONS_TYPES_CART } from './types';
 
 export const defaultCartState = {
   onCart: {
@@ -63,24 +42,6 @@ export const defaultCartState = {
     list: [],
   },
 };
-
-type ACTIONS_TYPES_CART =
-  | { type: 'successful_load_products'; payload: Product[] }
-  | { type: 'successful_load_vouchers'; payload: Voucher[] }
-  | { type: 'load_products' }
-  | { type: 'load_vouchers' }
-  | { type: 'failed_load_products' }
-  | { type: 'failed_load_vouchers' }
-  | { type: 'add_to_cart'; payload: Product }
-  | { type: 'increase_product'; payload: number }
-  | { type: 'decrement_product'; payload: number }
-  | { type: 'remove_product'; payload: number }
-  | { type: 'remove_all' }
-  | { type: 'get_total' }
-  | { type: 'get_subtotal'; payload: number }
-  | { type: 'apply_voucher'; payload: Voucher }
-  | { type: 'store_voucher'; payload: Voucher }
-  | { type: 'get_shipping'; payload: number };
 
 export function CartReducer(
   state: ICartState,
@@ -144,8 +105,9 @@ export function CartReducer(
         },
       };
     case 'add_to_cart': {
-      const productToCart: any = state.cart.products.find(
-        (product: any) => product.id === action.payload.id
+      const productToCart: any = getProduct(
+        state.cart.products,
+        action.payload.id
       );
 
       const onCartArray = state.onCart.products.some(
@@ -207,14 +169,10 @@ export function CartReducer(
               state.onCart.currentVoucher.type === 'shipping'
                 ? state.onCart.currentVoucher.amount
                 : state.onCart.shippingCosts,
-            products: state.onCart.products.map((product: Product) => {
-              if (product.id === action.payload)
-                return {
-                  ...product,
-                  quantity: product.quantity ? product.quantity + 1 : 1,
-                };
-              return product;
-            }),
+            products: onCartIncreaseQuantity(
+              state.onCart.products,
+              action.payload
+            ),
           },
         };
 
@@ -222,14 +180,10 @@ export function CartReducer(
         ...state,
         cart: {
           ...state.cart,
-          products: state.cart.products.map((product: Product) => {
-            if (product.id === action.payload)
-              return {
-                ...product,
-                available: product.available > 0 ? product.available - 1 : 0,
-              };
-            return product;
-          }),
+          products: decreaseAvailableProduct(
+            state.cart.products,
+            action.payload
+          ),
         },
         onCart: {
           ...state.onCart,
@@ -240,15 +194,11 @@ export function CartReducer(
             state.onCart.quantity + 1
           ),
           quantity: state.onCart.quantity + 1,
-          total: state.onCart.subtotal + state.onCart.shippingCosts,
-          products: state.onCart.products.map((product: Product) => {
-            if (product.id === action.payload)
-              return {
-                ...product,
-                quantity: product.quantity ? product.quantity + 1 : 1,
-              };
-            return product;
-          }),
+          total: getTotal(state.onCart.subtotal, state.onCart.shippingCosts),
+          products: onCartIncreaseQuantity(
+            state.onCart.products,
+            action.payload
+          ),
         },
       };
     }
