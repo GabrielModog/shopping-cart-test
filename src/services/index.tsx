@@ -1,12 +1,8 @@
 import React, { ReactNode, useEffect, useReducer } from 'react';
 import { toast } from 'react-toastify';
-import {
-  CartReducer,
-  defaultCartState,
-  ICart,
-  IVouchers,
-  OnCart,
-} from './shares';
+
+import { CartReducer, defaultCartState } from './shares';
+import { ICart, IVouchers, OnCart } from './shares/types';
 import { Product, Voucher } from './utils';
 
 export interface Services {
